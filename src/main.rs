@@ -1,8 +1,20 @@
 extern crate sound;
+extern crate portaudio;
 
 fn main() {
-    println!("Hello, world!");
+    match run() {
+        Ok(_) => {},
+        e => {
+            eprintln!("Example failed with the following: {:?}", e);
+        }
+    }
 }
+
+fn run() -> Result<(), portaudio::Error> {
+    let portaudio = try!(portaudio::PortAudio::new());
+    Err(portaudio::Error::NoError)
+}
+
 
 #[cfg(test)]
 mod tests {
