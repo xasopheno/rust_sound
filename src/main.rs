@@ -1,5 +1,22 @@
 extern crate sound;
 extern crate portaudio;
+use std::error::Error;
+use std::fmt;
+
+#[derive(Debug)]
+struct MyError<'a> {
+    error: &'a str,
+}
+
+impl<'a> fmt::Display for MyError<'a> {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "MyError Here")
+    }
+}
+
+impl<'a> Error for MyError<'a> {
+    fn description(&self) -> &str {"MyError Here"}
+}
 
 fn main() {
     match run() {
@@ -10,9 +27,9 @@ fn main() {
     }
 }
 
-fn run() -> Result<(), portaudio::Error> {
-    let portaudio = try!(portaudio::PortAudio::new());
-    Err(portaudio::Error::NoError)
+fn run() -> Result<(), Box<Error>> {
+    let portaudio = portaudio::PortAudio::new()?;
+    Err(Box::new(MyError{ error: "error" }))
 }
 
 
